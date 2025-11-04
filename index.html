@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d6efd" />
+    <title>PWA Camara</title>
+
+    <link rel="manifest" href="./manifest.json" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="./images/icons/apple-icon-180x180.png" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 1.5rem;
+            text-align: center;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+        }
+
+        #cameraContainer {
+            display: none;
+            margin-top: 20px;
+        }
+
+        video, canvas{
+    width: 95%;
+    max-width: 420px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.2);
+    background:#000;
+  }
+  video{ object-fit: contain; }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            button {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Camara PWA</h1>
+
+    <button id="openCamera">Abrir Cámara</button>
+
+    <div id="cameraContainer" style="display: none;">
+  <video id="video" autoplay playsinline></video><br>
+  <button id="takePhoto">Tomar Foto</button>
+  <button id="switchCamera" style="margin-left:8px;">Cambiar cámara</button><br>
+  <canvas id="canvas"></canvas>
+
+  <!-- Fallback iOS (oculto; se abre por JS si getUserMedia falla en el atajo) -->
+  <input id="fileCapture" type="file" accept="image/*" capture="environment" style="display:none" />
+</div>
+
+    <script src="./app.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker registrado correctamente'))
+                .catch(err => console.log('Error al registrar el Service Worker:', err));
+        }
+    </script>
+</body>
+</html>
