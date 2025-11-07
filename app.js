@@ -108,19 +108,29 @@ async function openCamera() {
     switchBtn.disabled = false;
     console.log('ready:', video.videoWidth, 'x', video.videoHeight);
   } catch (err) {
-    console.warn('getUserMedia error:', err);
+  console.warn('getUserMedia warning:', err);
 
-    // Fallback iOS para apps instaladas como atajo (y/o versiones con limitación)
-    if (isIOS && isStandalone) {
-      alert('En iPhone desde el atajo, la cámara en vivo puede no estar disponible. Abre la cámara nativa para tomar una foto.');
-      openFileCapture(); // dispara cámara nativa
-      cameraContainer.style.display = 'block';
-      openCameraBtn.textContent = 'Usando cámara nativa';
-      openCameraBtn.disabled = false;
-      switchBtn.disabled = true; // no aplica en fallback
-    } else {
-    }
+  // Safari o iOS: fallback al input file si está en modo standalone
+  if (isIOS && isStandalone) {
+    alert('En iPhone desde el atajo, la cámara en vivo puede no estar disponible. Abre la cámara nativa para tomar una foto.');
+    openFileCapture(); // dispara cámara nativa
+    cameraContainer.style.display = 'block';
+    openCameraBtn.textContent = 'Usando cámara nativa';
+    openCameraBtn.disabled = false;
+    switchBtn.disabled = true; // no aplica en fallback
+    return;
   }
+
+  // Manejo silencioso de errores leves (no mostrar alert)
+  // Solo mostrar si realmente es un error crítico de permisos
+  if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') {
+    alert('No se pudo acceder a la cámara. Verifica los permisos.');
+  } else {
+    // Error leve (por ejemplo, “AbortError” o “OverconstrainedError”)
+    // No mostrar nada, solo en consola.
+    console.log('Aviso leve ignorado:', err.name);
+  }
+}
 }
 
 // Fallback: abre la cámara nativa mediante input file
