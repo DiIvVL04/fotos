@@ -119,7 +119,6 @@ async function openCamera() {
       openCameraBtn.disabled = false;
       switchBtn.disabled = true; // no aplica en fallback
     } else {
-      alert('No se pudo acceder a la cámara. Revisa permisos/HTTPS.');
     }
   }
 }
